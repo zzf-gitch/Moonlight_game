@@ -1,0 +1,44 @@
+@use "./variables.scss" as *;
+
+.page-container {
+  width: 100%;
+  height: 100%;
+  background: #f1f1f1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-size: 16px;
+  scrollbar-width: none;
+  /* firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.page-container::-webkit-scrollbar {
+  display: none;
+  /* Chrome Safari */
+}
+
+// 仅有导航栏基础样式
+.only-nav-page-container {
+  width: 100%;
+  height: 100%;
+  background: #f1f1f1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-size: 16px;
+  padding-top: $navbar-height;
+  position: relative;
+  scrollbar-width: none;
+  /* firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.only-nav-page-container::-webkit-scrollbar {
+  display: none;
+  /* Chrome Safari */
+}

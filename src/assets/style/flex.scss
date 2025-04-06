@@ -1,0 +1,152 @@
+/*
+    第一个字母表示主轴方向：
+        v：vertical；
+        c：column；
+    第二个字母表示主轴：
+        s：flex-start；
+        b: space-between
+        c：center
+        e：flex-end
+    第三个字母交叉轴：
+        s：flex-start；
+        b: space-between
+        c：center
+        e：flex-end
+*/
+.flex_vss {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.flex_vsc {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.flex_vse {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.flex_vcs {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.flex_vbc {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex_vcc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex_vce {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.flex_ves {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.flex_vec {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.flex_vee {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.flex_css {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.flex_csc {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.flex_cbc {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex_cse {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.flex_ccs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.flex_ccc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex_cce {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.flex_ces {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.flex_cec {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.flex_cee {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.flex_fil {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+}

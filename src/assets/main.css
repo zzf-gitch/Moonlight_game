@@ -1,0 +1,49 @@
+@import "./base.css";
+
+#app {
+  /*padding: 2rem;*/
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+button {
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+input {
+  /* 去除默认的内边距和外边距 */
+  padding: 0;
+  margin: 0;
+
+  /* 去除默认的边框 */
+  border: none;
+
+  /* 去除轮廓线，当输入框获得焦点时 */
+  outline: none;
+
+  /* 去除背景色 */
+  background: transparent;
+
+  /* 重置字体样式 */
+  font: inherit;
+
+  /* 去除 iOS 中的默认清除按钮 */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
