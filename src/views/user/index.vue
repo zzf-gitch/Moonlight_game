@@ -5,7 +5,7 @@ import UserHeader from "./components/user-header.vue";
 import AccountVerification from "./components/account-verification.vue";
 import Feature from "./components/feature.vue";
 import { removeToken , removeUserInfo } from "@/utils/token-util";
-import { useUserStore } from "@/stores/modules/user";
+import { useUserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 
 const userStore = useUserStore();

@@ -7,7 +7,7 @@ import GoodItem from "./components/good-item.vue";
 import { GetMyList, fetchGoodSaleOrBan, DeleteMyList } from "@/api/good";
 import { showSuccessToast } from "vant";
 import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/modules/user";
+import { useUserStore } from "@/store/modules/user";
 import { fetchWarInfo } from '@/api/home'
 
 const router = useRouter();

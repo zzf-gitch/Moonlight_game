@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useUserStore } from '@/stores/modules/user';
+import { useUserStore } from '@/store/modules/user';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -100,7 +100,7 @@ const router = createRouter({
 })
 
 /**
- * 路由守卫 实时获取用户信息
+ * 路由守卫 通过pinia实时获取用户信息
  */
 router.beforeEach(async (to) => {
   const userStore = useUserStore();

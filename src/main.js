@@ -3,7 +3,7 @@ import './assets/style/index.scss'
 import './assets/main.css'
 
 import { createApp } from 'vue'
-import store from './stores';
+import store from './store';
 import 'amfe-flexible'
 import Vant from 'vant';
 import './assets/fonts/iconfont.css'

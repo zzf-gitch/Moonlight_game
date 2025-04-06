@@ -5,7 +5,7 @@ import Push from "@/assets/push.png";
 import AllShop from "@/assets/allshop.png";
 import MyShop from "@/assets/myshop.png";
 import Tag from "@/assets/tag.png";
-import { useUserStore } from "@/stores/modules/user";
+import { useUserStore } from "@/store/modules/user";
 
 const router = useRouter();
 const userStore = useUserStore();

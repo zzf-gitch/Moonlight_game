@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink, RouterView, useRoute, useRouter } from "vue-router";
-import { useUserStore } from "@/stores/modules/user";
+import { useUserStore } from "@/store/modules/user";
 
 const screenHeight = ref(667 + "px"); // 页面高度
 

@@ -3,7 +3,7 @@ import { ref } from "vue";
 import NavBar from "@/components/NavBar.vue";
 import { UserLogin } from "@/api/login.js";
 import { setToken , setUserInfo } from "@/utils/token-util";
-import { useUserStore } from "@/stores/modules/user";
+import { useUserStore } from "@/store/modules/user";
 import { showSuccessToast } from "vant";
 import { useRouter } from "vue-router";
 

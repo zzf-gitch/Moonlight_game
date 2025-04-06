@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, nextTick } from "vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/modules/user";
+import { useUserStore } from "@/store/modules/user";
 import HomeHeader from "./components/home-header.vue";
 import NavBar from "@/components/NavBar.vue";
 import TabBar from "@/components/TabBar.vue";

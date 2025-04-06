@@ -30,7 +30,7 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/modules/user";
+import { useUserStore } from "@/store/modules/user";
 
 const userStore = useUserStore();
 const { push, currentRoute } = useRouter();

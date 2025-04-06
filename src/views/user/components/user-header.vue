@@ -1,5 +1,5 @@
 <script setup>
-import { useUserStore } from "@/stores/modules/user";
+import { useUserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 import test from '@/assets/test.jpg'
 

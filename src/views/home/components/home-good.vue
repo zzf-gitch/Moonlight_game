@@ -24,7 +24,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { useUserStore } from "@/stores/modules/user";
+import { useUserStore } from "@/store/modules/user";
 const userStore = useUserStore();
 
 const props = defineProps({
