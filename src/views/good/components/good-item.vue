@@ -94,6 +94,7 @@ const formatTime = computed(() => {
 	height: 193px;
 	background: #fff;
 	padding: 10px;
+	overflow: auto;
 }
 
 .container {

@@ -14,6 +14,7 @@
 				<div class="time">
 					<p style="margin-left: 5px">{{ homeInfo?.game_name }}</p>
 					<p style="margin-left: 5px;margin-top: 5px;">编号：{{ homeInfo?.keyword }}</p>
+					<p style="margin-left: 5px;margin-top: 5px;">标题：{{ homeInfo?.name }}</p>
 				</div>
 				<div class="price" :style="{textDecoration: userStore?.isLogin ? 'line-through' : 'none'}">{{ Number(homeInfo?.price).toFixed(2) }}</div>
 				<div class="outher-price" v-if="userStore.isLogin">{{ Number(homeInfo?.othersPrice).toFixed(2) }}</div>
@@ -116,6 +117,7 @@ const goodPic = computed(() => {
 	flex: 1;
 	padding: 0 10px 10px 10px;
 	gap: 10px;
+	// align-items: flex-end;
 
 	.time {
 		flex: 2;
@@ -126,15 +128,17 @@ const goodPic = computed(() => {
 
 	.price {
 		flex: 1;
-		font-size: 20px;
+		font-size: 16px;
 		color: red;
 		font-weight: bold;
 		position: relative;
+		display: flex;
+		justify-content: flex-end;
 	}
 
 	.price::before {
 		content: "¥";
-		font-size: 20px;
+		font-size: 16px;
 		font-weight: bold;
 		margin-right: 2px;
 	}

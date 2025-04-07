@@ -59,7 +59,7 @@ const toggTab = (action) => {
 
 // 搜索商品关键词
 const handleSearchGoods = ({ keyword, min, max }) => {
-	goodQuery.value.words = keyword.split(" ");
+	goodQuery.value.words = keyword.trim().split(/\s+/);
 	goodQuery.value.page = 1;
 	list.value = [];
 	finished.value = false;

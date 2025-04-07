@@ -44,19 +44,23 @@ export function fetchAllGoodList(data) {
  * @returns 
  * @description 我的号源列表数据
  */
-export async function GetMyList(params) {
-  const res = await request.get('/goods/byUser', { params });
-    if (res.data.status === 200) {
-      return res.data.data;
-    }
-    return Promise.reject(new Error(res.data.msg));
+export async function GetMyList(data) {
+  const res = await request.post('/goods/byUser', data);
+  if (res.data.status === 200) {
+    return res.data.data;
+  }
+  return Promise.reject(new Error(res.data.msg));
 }
 
 /**
  * 调整上/下架
  */
-export function fetchGoodSaleOrBan(data) {
-  return request.post("/api/gameAccount/changeState", data);
+export async function EditStatus(data) {
+  const res = await request.post('/goods/changeInfo', data);
+  if (res.data.status === 200) {
+    return res.data.message;
+  }
+  return Promise.reject(new Error(res.data.msg));
 }
 
 /**
@@ -65,7 +69,7 @@ export function fetchGoodSaleOrBan(data) {
 export async function DeleteMyList(data) {
   const res = await request.delete('/goods', { data });
   if (res.data.status === 200) {
-    return res.data.data;
+    return res.data.message;
   }
   return Promise.reject(new Error(res.data.msg));
 }

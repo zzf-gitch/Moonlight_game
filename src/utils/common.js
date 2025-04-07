@@ -1,5 +1,4 @@
-
-s/**
+/**
  * 参数转url字符串
  * @param params 参数
  * @param url 需要拼接参数的地址
@@ -18,6 +17,21 @@ export function toURLSearch(params, url) {
 }
 
 /**
+ * 参数转表单数据
+ * @param params 参数
+ */
+export function toFormData(params) {
+  const formData = new FormData();
+  if (typeof params !== 'object' || params == null) {
+    return formData;
+  }
+  transformParams(params).forEach((d) => {
+    formData.append(d[0], d[1]);
+  });
+  return formData;
+}
+
+/**
  * get请求处理数组和对象类型参数
  * @param params 参数
  */
@@ -27,7 +41,11 @@ export function transformParams(params) {
     Object.keys(params).forEach((key) => {
       const value = params[key];
       if (value != null && value !== '') {
-        if (typeof value === 'object' && !isBlobFile(value)) {
+        if (Array.isArray(value)) {
+          value.forEach((item) => {
+            result.push([key, item]);
+          });
+        } else if (typeof value === 'object' && !isBlobFile(value)) {
           getObjectParamsArray(value).forEach((item) => {
             result.push([`${key}${item[0]}`, item[1]]);
           });

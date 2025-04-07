@@ -1,10 +1,10 @@
 <script setup name="MyGoodList">
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch, nextTick } from "vue";
 import NavBar from "@/components/NavBar.vue";
 import Search from "@/components/Search.vue";
 import Filtrate from "@/components/Filtrate.vue";
 import GoodItem from "./components/good-item.vue";
-import { GetMyList, fetchGoodSaleOrBan, DeleteMyList } from "@/api/good";
+import { GetMyList, EditStatus, DeleteMyList } from "@/api/good";
 import { showSuccessToast } from "vant";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/store/modules/user";
@@ -40,7 +40,7 @@ const info = computed(() => userStore.info ?? {})
 
 // 搜索
 const handleSearch = ({ keyword, min, max }) => {
-	goodQuery.value.words = keyword.split(" ");
+	goodQuery.value.words = keyword.trim().split(/\s+/);
 	goodQuery.value.page = 1;
 	list.value = [];
 	finished.value = false;
@@ -51,6 +51,7 @@ const goodQuery = ref({
 	id: info.value.id, // 用户id
 	page: 1, // 当前页码
 	limit: 10, // 每页显示条数
+	words: [] // 关键字
 });
 
 const loading = ref(false);
@@ -112,7 +113,8 @@ const onRefresh = () => {
 	goodQuery.value = {
 		page: 1,
 		limit: 10,
-		id: info.value.id
+		id: info.value.id,
+		words: []
 	};
 
 	// 清空列表数据
@@ -136,20 +138,40 @@ const pressTimer = ref(null);
 // 长按开始
 const current = ref(null)
 const startLongPress = (e, item) => {
-	e.preventDefault(); // 阻止默认行为（如系统菜单）
+	// 检查事件源是否为商品图片区域
+	const coverElement = e.target.closest('.cover');
+	if (!coverElement) return;
+
 	if (e.type === 'mousedown' && e.button !== 0) return; // 仅响应左键
-	if (pressTimer.value) return; // 防止重复触发
-	if (navigator.vibrate) navigator.vibrate(50); // 震动 50ms
+
+	// 添加contextmenu事件监听器
+	const preventContextMenu = (e) => {
+		e.preventDefault();
+		document.removeEventListener('contextmenu', preventContextMenu);
+	};
+
 	pressTimer.value = setTimeout(() => {
+		// 在长按触发时添加contextmenu事件监听器
+		document.addEventListener('contextmenu', preventContextMenu);
 		showActionSheet.value = true;
-		current.value = item ?? null
+		current.value = item ?? null;
 		pressTimer.value = null;
 	}, 600);
 };
 
-// 长按结束或中断
+// 长按结束
 const endLongPress = (e) => {
 	clearTimeout(pressTimer.value);
+};
+
+// 判断设备类型
+const isMobileDevice = () => {
+	const userAgent = navigator.userAgent.toLowerCase();
+	const mobileKeywords = [
+		'android', 'iphone', 'ipod', 'ipad', 'windows phone', 'blackberry', 'webos',
+		'opera mini', 'iemobile', 'mobile'
+	];
+	return mobileKeywords.some(keyword => userAgent.includes(keyword));
 };
 
 // ActionSheet 配置项
@@ -162,10 +184,11 @@ const actions = [
 const onSelect = async (action) => {
 	if (action.name === '上架/下架商品') {
 		try {
-			await fetchGoodSaleOrBan({
-				id: current.value.status ? false : true,
+			const res = await EditStatus({
+				id: current.value.id,
+				info: { status: current.value.status ? false : true }
 			});
-			showSuccessToast("操作成功");
+			showSuccessToast(res);
 			showActionSheet.value = false
 			goodQuery.value.page = 1;
 			list.value = [];
@@ -176,10 +199,10 @@ const onSelect = async (action) => {
 		}
 	} else {
 		try {
-			await DeleteMyList({
+			const res = await DeleteMyList({
 				ids: [current.value.id],
 			});
-			showSuccessToast("删除成功");
+			showSuccessToast(res);
 			showActionSheet.value = false
 			goodQuery.value.page = 1;
 			list.value = [];
@@ -209,22 +232,16 @@ const onSelect = async (action) => {
 		<!-- 商品列表 -->
 		<van-pull-refresh v-model="refreshing" @refresh="onRefresh">
 			<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="getGoodList">
-				<van-swipe-cell v-for="(item, index) in list" :key="item.id" @touchstart="startLongPress($event, item)"
-					@touchend="endLongPress" @mousedown="startLongPress($event, item)" @mouseup="endLongPress"
-					@mouseleave="endLongPress">
-					<good-item :good-info="item" :ImageUrl="ImageUrl" :good-index="index" @click="handleGoodDetail(item)"></good-item>
-					<!-- <template
-						#right
-						v-if="item.status === 0"
-					>
-						<van-button
-							square
-							:type="item.accStatus === '上架中' ? 'danger' : 'success'"
-							class="operate-button"
-							:text="item.accStatus === '上架中' ? '下架' : '上架'"
-							@click="handleGoodOperate(item)"
-						/>
-					</template> -->
+				<van-swipe-cell v-for="(item, index) in list" :key="item.id">
+					<div class="good-item-wrapper" 
+						@touchstart="isMobileDevice() ? startLongPress($event, item) : null"
+						@touchend="isMobileDevice() ? endLongPress() : null"
+						@mousedown="!isMobileDevice() ? startLongPress($event, item) : null"
+						@mouseup="!isMobileDevice() ? endLongPress() : null"
+						@mouseleave="!isMobileDevice() ? endLongPress() : null" 
+						@click.stop="handleGoodDetail(item)">
+						<good-item :good-info="item" :ImageUrl="ImageUrl" :good-index="index"></good-item>
+					</div>
 				</van-swipe-cell>
 			</van-list>
 		</van-pull-refresh>
@@ -239,5 +256,10 @@ const onSelect = async (action) => {
 <style lang="scss" scoped>
 .operate-button {
 	height: 100%;
+}
+
+.good-item-wrapper {
+	width: 100%;
+	cursor: pointer;
 }
 </style>

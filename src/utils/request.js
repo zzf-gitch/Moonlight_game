@@ -1,6 +1,7 @@
 import axios from "axios";
 import { showFailToast } from "vant";
 import { removeToken, getToken } from '@/utils/token-util';
+import { toURLSearch } from './common';
 
 const baseConfig = {
     baseURL: import.meta.env.VITE_API_NAME === 'dev' || 'test' ? import.meta.env.VITE_API_URL : window.location.origin,
@@ -20,6 +21,11 @@ instance.interceptors.request.use(
         const token = getToken();
         if (token && config.headers) {
             config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        // get请求处理数组和对象类型参数
+        if (config.method === 'get' && config.params) {
+            config.url = toURLSearch(config.params, config.url);
+            config.params = {};
         }
         return config;
     },

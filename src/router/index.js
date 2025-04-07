@@ -105,20 +105,21 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
   // 需要用户信息的页面路由
-  const authRoutes = ['MyGoodList', 'User', 'GoodUpload', 'TagManager'];
-  
+  const authRoutes = ['MyGoodList', 'User'];
+
   if (authRoutes.includes(to.name)) {
     try {
+      // 如果用户已登录，获取用户信息
       // 等待用户信息加载完成
       await userStore.fetchUserInfo();
-      
+
       // 如果用户未登录，跳转到登录页
-      if (!userStore.isLogin) {
-        return { name: 'Login' };
-      }
+      // if (!userStore.isLogin) {
+      //   return { name: 'Login' };
+      // }
     } catch (error) {
       console.error('Failed to fetch user info:', error);
-      return { name: 'Login' };
+      // return { name: 'Login' };
     }
   }
 });

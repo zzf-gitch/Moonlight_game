@@ -1,0 +1,56 @@
+// 卡片组件的全局样式
+.detail-header,
+.good-item,
+.home-good {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+
+  // 移动端适配
+  @media screen and (max-width: 768px) {
+    padding: 8px;
+    margin: 8px 6px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+    // 调整内部元素间距
+    .desc-container {
+      padding: 0 6px 6px 0;
+
+      .desc {
+        font-size: 13px;
+      }
+    }
+
+    .other-container {
+      padding: 0 6px 6px 0;
+
+      .time {
+        font-size: 11px;
+        padding-bottom: 3px;
+      }
+
+      .price {
+        font-size: 14px;
+      }
+
+      .outher-price {
+        font-size: 18px;
+      }
+    }
+
+    .container_time {
+      padding: 0 6px 6px 0;
+
+      .name {
+        font-size: 11px;
+      }
+
+      .time {
+        font-size: 9px;
+      }
+    }
+  }
+}

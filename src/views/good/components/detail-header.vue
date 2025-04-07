@@ -1,10 +1,12 @@
 <script setup>
-import {ref,computed} from "vue";
+import { ref, computed } from "vue";
 import { useRoute } from 'vue-router'
 import { showSuccessToast } from 'vant';
+import { useUserStore } from "@/store/modules/user";
+const userStore = useUserStore();
 const { params } = useRoute()
 const props = defineProps({
-  data:Object
+  data: Object
 })
 
 // 格式化时间
@@ -85,50 +87,61 @@ const isMobileDevice = () => {
 </script>
 
 <template>
-<div class="detail-header">
-  <div class="other-container flex_vbc">
-    <div class="price">{{ Number(data?.price).toFixed(2) }}</div>
-    <div class="time">
+  <div class="detail-header">
+    <div class="other-container flex_vbc">
+      <div class="price" :style="{ textDecoration: userStore?.isLogin ? 'line-through' : 'none' }">{{
+        Number(data?.price).toFixed(2) }}</div>
+      <div class="outher-price" v-if="userStore.isLogin">{{ Number(data?.othersPrice).toFixed(2) }}</div>
+      <div class="time">
         <p>编号：{{ data?.keyword }}</p>
         <div>
           <i class="iconfont icon-shouqifuzhi" :class="{ active: lineactive }" title="复制" @click="copy"
-            @mouseenter="mouseenter" @mouseleave="mouseleave" @touchstart="mouseenter"
-            @touchend="mouseleave"></i>
+            @mouseenter="mouseenter" @mouseleave="mouseleave" @touchstart="mouseenter" @touchend="mouseleave"></i>
         </div>
+      </div>
     </div>
-  </div>
 
-  <div class="desc-container flex_cbc">
-    <div class="desc">
-      {{ data?.desc }}
+    <div class="desc-container flex_cbc">
+      <div class="desc">
+        {{ data?.desc }}
+      </div>
     </div>
-  </div>
 
-  <div class="container_time flex_vbc">
-    <div class="name">
-      <p>{{ params?.game_name }}</p>
+    <div class="container_time flex_vbc">
+      <div class="name">
+        <p>{{ params?.game_name }}</p>
+      </div>
+      <div class="time">
+        <p>时间：{{ formatTime }}</p>
+      </div>
     </div>
-    <div class="time">
-      <p>时间：{{ formatTime }}</p>
-    </div>
-  </div>
 
-</div>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.detail-header{
+.detail-header {
   padding: 10px;
-  margin: 10px 20px 10px 15px;
   border-radius: 5px;
   box-shadow: 0 0 10px #ccc;
   background-color: #fff;
+
+  /* 移动端样式 */
+  @media screen and (max-width: 767px) {
+    margin: 10px 20px 10px 15px;
+  }
+
+  /* PC 端样式 */
+  @media screen and (min-width: 768px) {
+    margin: 10px 15px 10px 15px;
+  }
+
 
   .desc-container {
     padding: 0 10px 10px 0;
     width: 100%;
     align-self: stretch;
-  
+
     .desc {
       font-size: 14px;
       width: 100%;
@@ -139,14 +152,14 @@ const isMobileDevice = () => {
       overflow: hidden;
       font-weight: bolder;
     }
-  
+
   }
 
   .other-container {
     width: 100%;
     flex: 1;
     padding: 0 10px 10px 0;
-  
+
     .time {
       font-size: 12px;
       padding-bottom: 5px;
@@ -159,39 +172,63 @@ const isMobileDevice = () => {
         font-size: 20px;
         cursor: pointer;
       }
-      
+
       .active {
         color: #feaf00;
       }
 
     }
-  
+
     .price {
-      font-size: 20px;
+      font-size: 16px;
       color: red;
       font-weight: bold;
       position: relative;
     }
-  
+
     .price::before {
       content: "¥";
-      font-size: 20px;
+      font-size: 16px;
       font-weight: bold;
       margin-right: 2px;
     }
+
+    .outher-price {
+      font-size: 16px;
+      color: #3c8cff;
+      font-weight: bold;
+
+      /* 移动端样式 */
+      @media screen and (max-width: 767px) {
+        margin-left: -25px;
+      }
+
+      /* PC 端样式 */
+      @media screen and (min-width: 768px) {
+        margin-left: -80px;
+      }
+    }
+
+    .outher-price::before {
+      content: "¥";
+      font-size: 16px;
+      font-weight: bold;
+      margin-right: 2px;
+    }
+
   }
 
- .container_time {
+  .container_time {
     width: 100%;
     padding: 0 10px 10px 0;
 
-    .name{
+    .name {
       font-size: 12px;
     }
 
-   .time {
+    .time {
       font-size: 10px;
-      color:#e7e7e7;
+      color: #e7e7e7;
     }
   }
 

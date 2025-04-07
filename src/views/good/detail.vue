@@ -11,17 +11,12 @@ import { useRoute } from 'vue-router'
 const { params } = useRoute()
 
 const detailObj = ref({})
-const detailArr = ref([])
+const detailUrl = ref("")
 const GetDetail = async () => {
   try {
     const res = await GetHome({id:params.id});
-    // detailArr.value = res.detailsImages.map(item => {
-    //   return `${import.meta.env.VITE_API_URL}/showImg?id=${
-    //       item
-    //   }`
-    // })
-    console.log(res,'res')
     detailObj.value = res.goods
+    detailUrl.value = res.imgUrl
   } catch (e) {
     console.error(e, "GoodDetail");
   }
@@ -102,13 +97,10 @@ const componentId = reactive({
 
     <keep-alive>
       <transition mode="in-out" name="slide-right" appear>
-        <component :is="componentId.TabComp"></component>
+        <component :is="componentId.TabComp" :data="detailObj" :ImageUrl="detailUrl"></component>
       </transition>
     </keep-alive>
     
-    <!-- <DetailCard :data="detailObj"/> -->
-    <!-- <DetailFooter :data="detailObj" :detailArr="detailArr"/> -->
-
     <BackTop :container="container" :scrollTop="scrollTop" :scrollTrigger="scrollTrigger" v-show="isShow"
              @scrollTriggerChange="scrollTriggerChange" @scrollTopChange="scrollTopChange" @containerChange="containerChange"/>
 	</div>
@@ -125,7 +117,7 @@ const componentId = reactive({
 .testTab{
 	display: flex;
 	padding: 0 10px;
-  margin: 10px 10px 10px 5px;
+  margin: 10px 10px 5px 5px;
 	height: 40px;
 }
 
