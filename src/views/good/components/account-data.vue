@@ -25,6 +25,11 @@ const accountData = computed(() => {
 
   // 获取categories里面的数据
   const categoriesData = props.data?.categories.map(item => {
+    
+    if(item.type !== "val"){
+      item.val = item.vals.map(k=> k.val).join(",")
+    }
+
     return {
       label: item.name,
       value: item.val

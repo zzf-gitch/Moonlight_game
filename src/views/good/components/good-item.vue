@@ -64,6 +64,9 @@ const formatTime = computed(() => {
 						<span>上传者&nbsp;|&nbsp;编号：</span>
 						<span>{{ goodInfo?.keyword }}</span>
 					</div>
+					<div style="font-size: 14px;margin-top:5px;">
+						<span>标题：{{ goodInfo?.name }}</span>
+					</div>
 					<div class="time">
 						<!-- <van-icon
 							name="clock-o"
@@ -176,6 +179,7 @@ const formatTime = computed(() => {
 	.time {
 		color: #ababab;
 		margin-top: 5px;
+		font-size: 14px;
 	}
 
 	.author {
