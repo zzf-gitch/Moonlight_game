@@ -14,12 +14,42 @@
 			</van-dropdown-item>
 			<van-dropdown-item v-model="value" :options="options" @change="sort" />
 			<van-dropdown-item title="筛选" ref="itemRef" @open="openSelect">
-				<van-action-sheet v-model:show="show" title="筛选" @close="closeSelect">	
-					<div style="padding: 10px 15px;display: flex;">
-						<van-button type="default" block round @click="onConfirm" style="flex: 1;">
+				<van-action-sheet v-model:show="show" title="筛选" @close="closeSelect">
+					<div class="filter-content">
+						<div v-for="item in filterList" :key="item.id" class="filter-item">
+							<div class="filter-title">{{ item.name }}<span style="font-size: 12px;color:#c2c3c4;"
+									v-if="item.type === 'check'">(多选)</span></div>
+							<!-- 单选 -->
+							<van-radio-group v-model="item.value" direction="horizontal" v-if="item.type === 'radio'"
+								class="filter-options">
+								<van-radio v-for="option in item.options" :key="option.id" :name="option.id"
+									:style="{ background: item.value === option.id ? '#ffe0e0' : '#f5f5f5', color: item.value === option.id ? '#ff0000' : '#333' }">
+									<span :style="{ color: item.value === option.id ? '#ff0000' : '#333' }">{{
+										option.val }}</span>
+								</van-radio>
+							</van-radio-group>
+							<!-- 复选 -->
+							<van-checkbox-group v-model="item.value" direction="horizontal" v-if="item.type === 'check'"
+								class="filter-options">
+								<van-checkbox v-for="option in item.options" :key="option.id" :name="option.id"
+									:style="{ background: item.value.includes(option.id) ? '#ffe0e0' : '#f5f5f5', color: item.value.includes(option.id) ? '#ff0000' : '#333' }">
+									<span :style="{ color: item.value.includes(option.id) ? '#ff0000' : '#333' }">{{
+										option.val }}</span>
+								</van-checkbox>
+							</van-checkbox-group>
+							<!-- 范围输入 -->
+							<div v-if="item.type === 'val'" class="filter-range">
+								<van-field v-model="item.value[0]" type="number" placeholder="最小值" />
+								<span class="range-separator"></span>
+								<van-field v-model="item.value[1]" type="number" placeholder="最大值" />
+							</div>
+						</div>
+					</div>
+					<div class="filter-buttons">
+						<van-button type="default" block round @click="resetFilter" style="flex: 1;">
 							清空
 						</van-button>
-						<van-button type="danger" block round @click="onConfirm" style="flex: 1;margin-left: 10px;">
+						<van-button type="danger" block round @click="confirmFilter" style="flex: 1;margin-left: 10px;">
 							筛选
 						</van-button>
 					</div>
@@ -38,7 +68,7 @@
 
 <script setup>
 import { ref, reactive, nextTick } from "vue";
-import { fetchWarInfo } from '@/api/home'
+import { fetchWarInfo, GetCategoriesByH5 } from '@/api/home'
 import Popup from "./popup.vue";
 const emit = defineEmits(["submit", "sort", "onWarnInfo", "handleCategorize"]);
 const submit = (val) => {
@@ -87,50 +117,39 @@ const sort = (val) => {
 
 // 筛选
 const openSelect = () => {
-	duration.value = 0
-	overlay.value = false
+	show.value = true
 	nextTick(() => {
-		show.value = true
+		duration.value = 0
+		overlay.value = false
 	})
 }
 
 const closeSelect = () => {
 	show.value = false
-	duration.value = 0.2
 	overlay.value = true
+	duration.value = 0.2
 	nextTick(() => {
-		menuRef.value.close();
+		menuRef.value.close()
 	})
 }
-
-const onConfirm = () => {
-	// itemRef.value.toggle();
-	// 或者
-	emit('handleCategorize', '分类筛选')
-	show.value = false
-	duration.value = 0.2
-	overlay.value = true
-	nextTick(() => {
-		menuRef.value.close();
-	})
-};
 
 const activeId = ref();
 const activeIndex = ref();
 const items = ref([])
 
+// 获取游戏区服
 const WarInfoList = async () => {
 	const res = await fetchWarInfo()
 	items.value = res.map(item => {
 		let children = []
 		children = item.children.map(row => {
 			return {
-				text:row.c_name,
-				id:row.id
+				text: row.c_name,
+				id: row.id
 			}
 		})
 		return {
-			text:item.f_name,
+			text: item.f_name,
 			children: children
 		}
 	})
@@ -217,6 +236,78 @@ const onWarnInfoAll = (e) => {
 // 		],
 // 	},
 // ])
+
+// 获取更多筛选数据
+const filterList = ref([])
+
+const getMoreData = async () => {
+	const res = await GetCategoriesByH5()
+	if (res && Array.isArray(res)) {
+		// 按权重排序
+		filterList.value = res.sort((a, b) => {
+			if (a.weight === b.weight) {
+				return new Date(a.createTime) - new Date(b.createTime)
+			}
+			return b.weight - a.weight
+		}).map(item => ({
+			...item,
+			value: item.type === 'val' ? ['', ''] : item.type === 'check' ? [] : ''
+		}))
+	}
+};
+
+const resetFilter = () => {
+	filterList.value.forEach(item => {
+		item.value = item.type === 'val' ? ['', ''] : item.type === 'check' ? [] : ''
+	})
+}
+
+// 确认筛选
+const confirmFilter = () => {
+	// 处理筛选条件
+	// 在这个reduce函数中：acc是累加器（accumulator），它是每次迭代的结果，会被传递到下一次迭代中；
+	// cur是当前正在处理的数组元素，代表filterList.value中的每一项；[]是初始值，表示acc的初始值是一个空数组。
+	// 这个reduce函数的作用是将筛选条件转换为特定格式的数组，每次迭代时根据条件将处理后的数据添加到acc中。
+	const filterData = filterList.value.reduce((acc, cur) => {
+		if (cur.value) {
+			if (cur.type === 'check' || cur.type === 'radio') {
+				const options = Array.isArray(cur.value) ? cur.value : [cur.value];
+				if (options.length > 0) {
+					acc.push({
+						type: cur.type,
+						id: cur.id,
+						options: options
+					});
+				}
+			} else if (cur.type === 'val') {
+				// 处理价格范围的边界情况
+				const min = cur.value[0] === '' && cur.value[1] !== '' ? 0 : Number(cur.value[0]);
+				const max = cur.value[1] === '' && cur.value[0] !== '' ? Infinity : Number(cur.value[1]);
+
+				// 只要有一个值不为空，就添加到筛选条件中
+				if (cur.value[0] !== '' || cur.value[1] !== '') {
+					acc.push({
+						type: cur.type,
+						id: cur.id,
+						min,
+						max
+					});
+				}
+			}
+		}
+		return acc;
+	}, []);
+
+	emit('handleCategorize', filterData);
+	show.value = false;
+	duration.value = 0.2;
+	overlay.value = true;
+	nextTick(() => {
+		menuRef.value.close();
+	});
+};
+
+getMoreData()
 </script>
 
 <style lang="scss" scoped>
@@ -224,5 +315,121 @@ const onWarnInfoAll = (e) => {
 	width: 100%;
 	height: 50px;
 	background: #fff;
+
+	:deep(.van-dropdown-menu) {
+		background: transparent;
+	}
+
+	:deep(.van-dropdown-menu__item) {
+		background: transparent;
+	}
+}
+
+.filter-content {
+	padding: 15px;
+	max-height: 450px;
+	overflow: hidden;
+	overflow-y: scroll;
+}
+
+.filter-item {
+	margin-bottom: 20px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.filter-title {
+	font-size: 16px;
+	font-weight: bold;
+	color: #333;
+	margin-bottom: 12px;
+}
+
+.filter-options {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 12px;
+
+	:deep(.van-radio),
+	:deep(.van-checkbox) {
+		margin: 0;
+		padding: 6px 12px;
+		background: #f5f5f5;
+		border-radius: 16px;
+		transition: all 0.3s ease;
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.van-radio__icon,
+		.van-checkbox__icon {
+			display: none;
+		}
+
+		.van-radio__label,
+		.van-checkbox__label {
+			color: #333;
+			font-size: 13px;
+			margin-left: 0;
+			text-align: center;
+		}
+
+		&.van-radio--checked,
+		&.van-checkbox--checked {
+			background: #de868f;
+
+			.van-radio__label,
+			.van-checkbox__label {
+				color: #fff;
+			}
+		}
+	}
+}
+
+.filter-range {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+
+	:deep(.van-field) {
+		flex: 1;
+		background: #f7f8fa;
+		border-radius: 4px;
+		padding: 0;
+
+		.van-field__control {
+			height: 40px;
+			text-align: center;
+			font-size: 14px;
+			color: #333;
+		}
+
+		&::placeholder {
+			color: #999;
+		}
+	}
+
+	.range-separator {
+		width: 25px;
+		height: 3px;
+		background: #999;
+		border-radius: 1.5px;
+		color: #999;
+		font-size: 14px;
+	}
+}
+
+.filter-buttons {
+	padding: 15px;
+	display: flex;
+	gap: 10px;
+
+	.van-button {
+		height: 40px;
+		font-size: 14px;
+	}
 }
 </style>

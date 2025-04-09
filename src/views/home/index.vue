@@ -68,12 +68,11 @@ const handleSearchGoods = ({ keyword, min, max }) => {
 
 // 更多筛选
 const handleCategorize = (val) => {
-	console.log("handleCategorize", val);
-	// goodQuery.value.categories = val.length === 0 ? null : val;
-	// goodQuery.value.page = 1;
-	// list.value = [];
-	// finished.value = false;
-	// getGoodList();
+	goodQuery.value.categories = val;
+	goodQuery.value.page = 1;
+	list.value = [];
+	finished.value = false;
+	getGoodList();
 };
 
 // 综合排序
@@ -119,8 +118,8 @@ const goodQuery = ref({
 	page: 1, // 当前页码
 	limit: 10, // 每页显示条数
 	categories: [], // 更多筛选
-	maxPrice: Infinity, // 更多筛选最大值
-	minPrice: 0, // 更多筛选最小值
+	// maxPrice: Infinity, // 更多筛选最大值
+	// minPrice: 0, // 更多筛选最小值
 });
 const finished = ref(false);
 const refreshing = ref(false);

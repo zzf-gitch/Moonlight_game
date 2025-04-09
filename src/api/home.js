@@ -58,3 +58,16 @@ export async function fetchWarInfo() {
 //     return Promise.reject(new Error('获取游戏区服失败'));
 // }
 
+/**
+ * 
+ * @param {列表参数} data 
+ * @returns 
+ * @description 首页更多筛选
+ */
+export async function GetCategoriesByH5() {
+    const res = await request.get('/categoriesByH5');
+    if (res.data.status === 200) {
+        return res.data.data;
+      }
+      return Promise.reject(new Error(res.data.msg));
+}
