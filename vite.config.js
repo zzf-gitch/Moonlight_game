@@ -1,58 +1,82 @@
+// 导入必要的Node.js内置模块和Vite插件
 import { fileURLToPath, URL } from 'node:url'
-
+import path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+// 自动导入组件的插件
 import Components from 'unplugin-vue-components/vite'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
+// 用于将px单位转换为rem的PostCSS插件
 import postCssPxToRem from 'postcss-pxtorem'
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+// 定义路径解析函数
+const resolve = (dir) => path.resolve(__dirname, dir)
+
+// Vite配置文件
+export default defineConfig(({ command }) => {
+  // 打印当前执行的命令（serve用于开发，build用于生产）
+  console.log("当前命令:" + command)
+
+  // 根据当前命令设置基础公共路径
+  // 开发环境使用相对路径，生产环境使用/dist/
+  let base = command === 'serve' ? './' : './'
+
+  // 生产环境特殊处理，设置不同的基础路径
+  if (command === 'build') {
+    base = './'
+  }
+
+  // 配置路径别名，方便模块导入
+  const alias = {
+    '@/': resolve('src') + '/',
+    // 解决vue-i18n警告
+    'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
+  };
 
   return {
     plugins: [
-      // 解析单文件组件的插件
+      // Vue3单文件组件支持
       vue(),
-      // 自动导入的插件，解析器可以是 vant element and-vue
+      // 自动导入组件配置
       Components({
-        dts: false,
-        // 原因：Toast Confirm 这类组件的样式还是需要单独引入，样式全局引入了，关闭自动引入
+        dts: false, // 禁用TypeScript声明文件生成
+        // Vant组件按需引入配置，关闭自动样式导入（已全局导入）
         resolvers: [VantResolver({ importStyle: false })]
       })
     ],
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url))
-      }
-    },
+    // 路径别名配置
+    resolve: { alias },
+    // 部署基础路径配置
+    base: base,
+    // 开发服务器配置
     server:{
-      port: 443, //指定开发服务器端口
-      strictPort: false, //设为 true 时若端口已被占用则会直接退出，而不是尝试下一个可用端口
-      cors: true, //为开发服务器配置 CORS。默认启用并允许任何源，传递一个 选项对象 来调整行为或设为 false 表示禁用
+      port: 443, // 指定开发服务器端口号
+      strictPort: false, // 端口被占用时是否尝试其他端口
+      cors: true, // 开启CORS跨域支持
     },
+    // CSS相关配置
     css: {
+      // SCSS预处理器配置
       preprocessorOptions: {
         scss: {
-          api: 'modern-compiler', // or 'modern'
+          api: 'modern-compiler',
+          // 全局引入scss变量文件
           additionalData: '@use "@/assets/style/variables.scss" as *;',
           javascriptEnabled: true
         }
       },
+      // PostCSS配置
       postcss: {
         plugins: [
+          // px转rem配置（已注释，可根据需要启用）
           // postCssPxToRem({
-          //   // 配置在将px转化为rem时 1rem等于多少px(因为我们搭配使用了amfe-flexible插件 此处我们需要设置的值应是UI设计稿全屏基准宽度的十分之一)
-          //   // 当UI设计稿的全屏基准宽度是750px时 此处设置的值为75 但项目中使用了vant组件库 vant的设计稿总宽度是375px 其十分之一应是37.5(需要区分设置)
+          //   // rootValue根据设计稿宽度调整，一般设计稿宽度/10
+          //   // vant组件库基于375px设计，自定义组件基于750px设计
           //   rootValue({ file }) {
           //     return file.indexOf('vant') !== -1 ? 37.5 : 37.5
           //   },
-          //   // rootValue: 16, // 根元素字体大小,
-          //   mediaQuery: false,
-          //   // 所有px均转化为rem
-          //   propList: ["*"]
-          //   // 若想设置部分样式不转化 可以在配置项中写出
-          //   // eg: 除 border和font-size外 所有px均转化为rem
-          //   // propList: ["*", "!border","!font-size"],
+          //   mediaQuery: false, // 禁止媒体查询中转换px
+          //   propList: ["*"] // 所有属性都转换
           // })
         ]
       }
