@@ -54,6 +54,21 @@ export default defineConfig(({ command }) => {
       strictPort: false, // 端口被占用时是否尝试其他端口
       cors: true, // 开启CORS跨域支持
     },
+    build: {
+      // 使用terser作为代码压缩工具
+      minify: 'terser',
+      // 生产环境压缩配置
+      terserOptions: {
+        compress: {
+          drop_console: true, // 移除所有 console 语句
+          drop_debugger: true, // 移除 debugger 语句
+          pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn'], // 移除指定的console函数
+        },
+        format: {
+          comments: false, // 删除注释
+        },
+      },
+    },
     // CSS相关配置
     css: {
       // SCSS预处理器配置
