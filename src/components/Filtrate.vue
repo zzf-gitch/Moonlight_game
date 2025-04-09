@@ -377,15 +377,6 @@ getMoreData()
 			text-align: center;
 		}
 
-		&.van-radio--checked,
-		&.van-checkbox--checked {
-			background: #de868f;
-
-			.van-radio__label,
-			.van-checkbox__label {
-				color: #fff;
-			}
-		}
 	}
 }
 
