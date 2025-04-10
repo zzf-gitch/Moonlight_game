@@ -355,7 +355,7 @@ getMoreData()
 	:deep(.van-radio),
 	:deep(.van-checkbox) {
 		margin: 0;
-		padding: 6px 12px;
+		padding: 12px 12px;
 		background: #f5f5f5;
 		border-radius: 16px;
 		transition: all 0.3s ease;
