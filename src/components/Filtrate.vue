@@ -1,5 +1,5 @@
 <template>
-	<div class="filtrate-container">
+	<div class="filtrate-container" :class="{ 'desktop': isDesktop }">
 		<van-dropdown-menu ref="menuRef" :overlay="overlay" :duration="duration">
 			<van-dropdown-item title="游戏区服" ref="itemRef">
 				<van-tree-select v-model:active-id="activeId" v-model:main-active-index="activeIndex" :items="items" />
@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, nextTick } from "vue";
+import { ref, reactive, nextTick , computed } from "vue";
 import { fetchWarInfo, GetCategoriesByH5 } from '@/api/home'
 import Popup from "./popup.vue";
 const emit = defineEmits(["submit", "sort", "onWarnInfo", "handleCategorize"]);
@@ -307,6 +307,18 @@ const confirmFilter = () => {
 	});
 };
 
+// 判断设备类型
+const isMobileDevice = () => {
+	const userAgent = navigator.userAgent.toLowerCase();
+	const mobileKeywords = [
+		'android', 'iphone', 'ipod', 'ipad', 'windows phone', 'blackberry', 'webos',
+		'opera mini', 'iemobile', 'mobile'
+	];
+	return mobileKeywords.some(keyword => userAgent.includes(keyword));
+};
+
+const isDesktop = computed(() => !isMobileDevice());
+
 getMoreData()
 </script>
 
@@ -315,9 +327,25 @@ getMoreData()
 	width: 100%;
 	height: 50px;
 	background: #fff;
+	margin: 0 auto;
+	position: relative;
+
+	&.desktop {
+		max-width: 430px;
+	
+		:deep(.van-tree-select),
+		:deep(.van-dropdown-item),
+		:deep(.van-action-sheet) {
+			width: 100%;
+			max-width: 430px;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+	}
 
 	:deep(.van-dropdown-menu) {
 		background: transparent;
+		width: 100%;
 	}
 
 	:deep(.van-dropdown-menu__item) {

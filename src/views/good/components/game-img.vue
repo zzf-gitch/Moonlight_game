@@ -1,9 +1,9 @@
 <script setup>
-import { ref,computed } from 'vue'
+import { ref, computed } from 'vue'
 import { showImagePreview, showLoadingToast, showSuccessToast } from "vant"
 const props = defineProps({
-  data:Object,
-  ImageUrl:String,
+  data: Object,
+  ImageUrl: String,
 })
 
 // 预览详情图
@@ -12,10 +12,10 @@ const previewImages = computed(() => {
     return props.ImageUrl + item
   })
 })
-const previewImage = (item,index) => {
+const previewImage = (item, index) => {
   showImagePreview({
-    images:previewImages.value,
-    startPosition:index,
+    images: previewImages.value,
+    startPosition: index,
     closeable: true,
   })
 }
@@ -43,7 +43,7 @@ const stitchAndDownload = async () => {
     });
     // 并行加载所有图片
     const images = await Promise.all(previewImages.value.map(url => loadImage(url)));
-    
+
     // 计算画布尺寸
     let totalHeight = 0;
     let maxWidth = 0;
@@ -71,7 +71,7 @@ const stitchAndDownload = async () => {
     link.download = '商品详情.png';
     link.href = dataUrl;
     link.click();
-    
+
     showSuccessToast('下载完成');
   } catch (error) {
     console.error('图片处理出错:', error);
@@ -122,18 +122,18 @@ const copy = async () => {
 </script>
 
 <template>
-<div class="game-img">
-  <div class="Image" v-for="(item,index) in data.images" :key="index" @click="previewImage(item,index)">
-    <img :src="ImageUrl + item" alt="">
-  </div>
+  <div class="game-img">
+    <div class="Image" v-for="(item, index) in data.images" :key="index" @click="previewImage(item, index)">
+      <img :src="ImageUrl + item" alt="">
+    </div>
 
-  <van-button type="primary" class="copy" @click="copy">一键复制</van-button>
-  <van-button type="primary" class="saveImage" @click="stitchAndDownload">保存长图</van-button>
-</div>
+    <van-button type="primary" class="copy" @click="copy">一键复制</van-button>
+    <van-button type="primary" class="saveImage" @click="stitchAndDownload">保存长图</van-button>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.game-img{
+.game-img {
   width: 100%;
   height: auto;
   background: #fff;
@@ -149,32 +149,59 @@ const copy = async () => {
     padding: 10px;
   }
 
-  .Image{
+  .Image {
     width: 100%;
     height: 100%;
     font-size: 0;
     display: block;
-    img{
+
+    img {
       width: 100%;
       height: 100%;
       display: block;
-    } 
+    }
   }
 
-  .copy{
-    position: fixed;
-    bottom: 50px; 
-    left: 50px;
-    width: 100px;
-    height: 40px;
+  /* 移动端样式 */
+  @media screen and (max-width: 767px) {
+
+    .copy {
+      position: fixed;
+      bottom: 50px;
+      left: 50px;
+      width: 100px;
+      height: 40px;
+    }
+  
+    .saveImage {
+      position: fixed;
+      bottom: 50px;
+      right: 50px;
+      width: 100px;
+      height: 40px;
+    }
+    
   }
 
-  .saveImage{
-    position: fixed;
-    bottom: 50px;
-    right: 50px; 
-    width: 100px;
-    height: 40px;
+  /* PC 端样式 */
+  @media screen and (min-width: 768px) {
+
+    .copy {
+      position: absolute;
+      bottom: 50px;
+      left: 50px;
+      width: 100px;
+      height: 40px;
+    }
+  
+    .saveImage {
+      position: absolute;
+      bottom: 50px;
+      right: 50px;
+      width: 100px;
+      height: 40px;
+    }
+
   }
 
 }
