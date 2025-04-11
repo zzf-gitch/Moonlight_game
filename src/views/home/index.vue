@@ -186,6 +186,11 @@ const onRefresh = () => {
 	getGoodList();
 };
 
+// 登录人名字
+const nickname = computed(() => {
+	return userStore.info?.username.split('')[0] || "";
+});
+
 </script>
 
 <template>
@@ -212,7 +217,8 @@ const onRefresh = () => {
 					<van-popover v-else v-model:show="showPopover" :actions="actions" :offset="[offsetX, 10]"
 						placement="bottom-start" @select="toggTab">
 						<template #reference>
-							<img class="avatar" :src="test" />
+							<!-- <img class="avatar" :src="test" /> -->
+							<div class="nickname">{{ nickname }}</div>
 						</template>
 					</van-popover>
 				</template>
@@ -257,5 +263,17 @@ const onRefresh = () => {
 	height: 28px;
 	border-radius: 50%;
 	background-color: #ccc;
+}
+
+.nickname{
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background-color: #ccc;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: bolder;
+	color: #fff;
 }
 </style>

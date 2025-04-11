@@ -105,7 +105,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
   // 需要用户信息的页面路由
-  const authRoutes = ['MyGoodList', 'User'];
+  const authRoutes = ['MyGoodList', 'User', 'Home'];
 
   if (authRoutes.includes(to.name)) {
     try {
