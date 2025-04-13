@@ -50,7 +50,7 @@ export default defineConfig(({ command }) => {
     base: base,
     // 开发服务器配置
     server:{
-      port: 443, // 指定开发服务器端口号
+      port: 4090, // 指定开发服务器端口号
       strictPort: false, // 端口被占用时是否尝试其他端口
       cors: true, // 开启CORS跨域支持
     },
