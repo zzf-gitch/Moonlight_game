@@ -162,46 +162,20 @@ const copy = async () => {
     }
   }
 
-  /* 移动端样式 */
-  @media screen and (max-width: 767px) {
-
-    .copy {
-      position: fixed;
-      bottom: 50px;
-      left: 50px;
-      width: 100px;
-      height: 40px;
-    }
-  
-    .saveImage {
-      position: fixed;
-      bottom: 50px;
-      right: 50px;
-      width: 100px;
-      height: 40px;
-    }
-    
+  .copy {
+    position: fixed;
+    bottom: 50px;
+    left: 50px;
+    width: 100px;
+    height: 40px;
   }
 
-  /* PC 端样式 */
-  @media screen and (min-width: 768px) {
-
-    .copy {
-      position: absolute;
-      bottom: 50px;
-      left: 50px;
-      width: 100px;
-      height: 40px;
-    }
-  
-    .saveImage {
-      position: absolute;
-      bottom: 50px;
-      right: 50px;
-      width: 100px;
-      height: 40px;
-    }
-
+  .saveImage {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    width: 100px;
+    height: 40px;
   }
 
 }
