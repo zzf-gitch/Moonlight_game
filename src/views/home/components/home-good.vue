@@ -47,7 +47,7 @@ const goodPic = computed(() => {
 <style scoped lang="scss">
 .good-container {
 	height: auto;
-	margin: 10px 20px 10px 15px;
+	margin: 10px 15px 10px 15px;
 	border-radius: 5px;
 	background: #fff;
 }

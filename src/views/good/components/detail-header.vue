@@ -125,16 +125,16 @@ const isMobileDevice = () => {
   border-radius: 5px;
   box-shadow: 0 0 10px #ccc;
   background-color: #fff;
+  margin: 10px 15px 10px 15px;
+  // /* 移动端样式 */
+  // @media screen and (max-width: 767px) {
+  //   margin: 10px 20px 10px 15px;
+  // }
 
-  /* 移动端样式 */
-  @media screen and (max-width: 767px) {
-    margin: 10px 20px 10px 15px;
-  }
-
-  /* PC 端样式 */
-  @media screen and (min-width: 768px) {
-    margin: 10px 15px 10px 15px;
-  }
+  // /* PC 端样式 */
+  // @media screen and (min-width: 768px) {
+  //   margin: 10px 15px 10px 15px;
+  // }
 
 
   .desc-container {

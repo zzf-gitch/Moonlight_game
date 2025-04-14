@@ -52,21 +52,26 @@ const handleLogin = () => {
 </template>
 
 <style lang="scss" scoped>
-/* PC 端样式 */
-@media screen and (min-width: 768px) {
-	.page-container {
-		padding: calc($navbar-height + 20px) 10px calc($tabbar-height + 20px);
-		background: #fafafa;
-	}
+.page-container {
+	padding: calc($navbar-height + 20px) 10px calc($tabbar-height + 20px);
+	background: #fafafa;
 }
 
-/* 移动端样式 */
-@media screen and (max-width: 767px) {
-	.page-container {
-		padding: calc($navbar-height + 20px) 20px calc($tabbar-height + 20px) 10px;
-		background: #fafafa;
-	}
-}
+// /* PC 端样式 */
+// @media screen and (min-width: 768px) {
+// 	.page-container {
+// 		padding: calc($navbar-height + 20px) 10px calc($tabbar-height + 20px);
+// 		background: #fafafa;
+// 	}
+// }
+
+// /* 移动端样式 */
+// @media screen and (max-width: 767px) {
+// 	.page-container {
+// 		padding: calc($navbar-height + 20px) 20px calc($tabbar-height + 20px) 10px;
+// 		background: #fafafa;
+// 	}
+// }
 
 .signout-button {
 	width: 80%;

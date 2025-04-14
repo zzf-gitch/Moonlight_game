@@ -246,7 +246,7 @@ const onSelect = async (action) => {
 			</van-list>
 		</van-pull-refresh>
 
-		<van-back-top right="15vw" bottom="10vh" />
+		<van-back-top right="15vw" bottom="6vh" />
 
 		<!-- ActionSheet 组件 -->
 		<van-action-sheet v-model:show="showActionSheet" :actions="actions" @select="onSelect" />

@@ -18,12 +18,13 @@ const userStore = useUserStore();
 const offsetX = computed(() => {
 	const bodyWidth = document.body.offsetWidth;
 	const clientWidth = window.innerWidth;
-
 	if (bodyWidth === clientWidth) {
-		return 8;
+		// return 8;
+		return -6;
 	}
 
-	return (clientWidth - bodyWidth) / 2 + 8;
+	return (clientWidth - bodyWidth) / 2 - 6;
+	// return (clientWidth - bodyWidth) / 2 + 8;
 });
 
 /** 头像下拉框 */
@@ -238,7 +239,7 @@ const nickname = computed(() => {
 			</van-list>
 		</van-pull-refresh>
 
-		<van-back-top right="15vw" bottom="1vh" />
+		<van-back-top right="15vw" bottom="6vh" />
 		<!-- <TabBar /> -->
 	</div>
 </template>

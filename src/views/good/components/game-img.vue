@@ -138,16 +138,17 @@ const copy = async () => {
   height: auto;
   background: #fff;
   position: relative;
+  padding: 10px;
 
-  /* 移动端样式 */
-  @media screen and (max-width: 767px) {
-    padding: 10px 20px 10px 10px;
-  }
+  // /* 移动端样式 */
+  // @media screen and (max-width: 767px) {
+  //   padding: 10px 20px 10px 10px;
+  // }
 
-  /* PC 端样式 */
-  @media screen and (min-width: 768px) {
-    padding: 10px;
-  }
+  // /* PC 端样式 */
+  // @media screen and (min-width: 768px) {
+  //   padding: 10px;
+  // }
 
   .Image {
     width: 100%;
