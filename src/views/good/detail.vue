@@ -117,7 +117,7 @@ const componentId = reactive({
 .testTab{
 	display: flex;
 	padding: 0 10px;
-  margin: 10px 10px 5px 5px;
+  margin: 5px;
 	height: 40px;
 }
 
