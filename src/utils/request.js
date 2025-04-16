@@ -4,7 +4,7 @@ import { removeToken, getToken } from '@/utils/token-util';
 import { toURLSearch } from './common';
 
 const baseConfig = {
-    baseURL: import.meta.env.VITE_API_NAME === 'dev' || 'test' ? import.meta.env.VITE_API_URL : window.location.origin,
+    baseURL: import.meta.env.VITE_API_URL,
     timeout: 30000,
     headers: {
         'Content-Type': 'application/json'
