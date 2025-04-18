@@ -373,6 +373,9 @@ const onSearch = async () => {
 				});
 				// 只保留还有匹配选项的筛选项
 				return item.options.length > 0;
+				// if(item.options.length > 0) {
+				// 	return item;
+				// }
 			}
 			return false;
 		});
