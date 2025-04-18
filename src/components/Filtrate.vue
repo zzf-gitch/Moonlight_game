@@ -352,24 +352,38 @@ const isDesktop = computed(() => !isMobileDevice());
 // 	clearInterval(timer.value);
 // });
 
-// 搜索
+// 搜索功能实现
 const searchValue = ref('')
 const onSearch = async () => {
+	// 首先重新获取完整的筛选数据，确保数据是最新的
 	await getMoreData()
+
+	// 判断搜索值是否为空
 	if (searchValue.value !== '') {
+		// 如果搜索值不为空，对filterList进行过滤处理
 		let list = filterList.value.filter((item) => {
+			// 检查当前筛选项是否包含选项数组
 			if (item.options?.length > 0) {
-				return item.options.some((option) => {
+				// return item.options.some((option) => {
+				// 	return option.val.toLowerCase().includes(searchValue.value.toLowerCase());
+				// });
+				item.options = item.options.filter((option) => {
+					// 将选项值和搜索关键词转为小写进行比较，实现不区分大小写的搜索
 					return option.val.toLowerCase().includes(searchValue.value.toLowerCase());
 				});
+				// 只保留还有匹配选项的筛选项
+				return item.options.length > 0;
 			}
+			return false;
 		});
+		// 更新筛选列表为过滤后的结果
 		filterList.value = list;
 		// showSuccessToast('搜索成功');
 		// if (filterList.value.length == false) {
 		// 	showFailToast('搜索失败');
 		// }
 	} else {
+		// 如果搜索值为空，重新获取完整的筛选数据
 		await getMoreData()
 	}
 }
