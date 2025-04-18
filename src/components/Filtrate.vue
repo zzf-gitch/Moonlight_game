@@ -15,6 +15,7 @@
 			<van-dropdown-item v-model="value" :options="options" @change="sort" />
 			<van-dropdown-item title="筛选" ref="itemRef" @open="openSelect">
 				<van-action-sheet v-model:show="show" title="筛选" @close="closeSelect">
+					<van-search v-model="searchValue" placeholder="筛选" @update:model-value="onSearch" clearable/>
 					<div class="filter-content">
 						<div v-for="item in filterList" :key="item.id" class="filter-item">
 							<div class="filter-title">{{ item.name }}<span style="font-size: 12px;color:#c2c3c4;"
@@ -67,9 +68,11 @@
 </template>
 
 <script setup>
-import { ref, reactive, nextTick , computed } from "vue";
+import { ref, reactive, nextTick, computed } from "vue";
 import { fetchWarInfo, GetCategoriesByH5 } from '@/api/home'
 import Popup from "./popup.vue";
+import { showSuccessToast, showFailToast } from 'vant';
+
 const emit = defineEmits(["submit", "sort", "onWarnInfo", "handleCategorize"]);
 const submit = (val) => {
 	emit("submit", val);
@@ -319,6 +322,28 @@ const isMobileDevice = () => {
 
 const isDesktop = computed(() => !isMobileDevice());
 
+// 搜索
+const searchValue = ref('')
+const onSearch = async () => {
+	await getMoreData()
+	if (searchValue.value !== '') {
+		let list = filterList.value.filter((item) => {
+			if (item.options?.length > 0) {
+				return item.options.some((option) => {
+					return option.val.toLowerCase().includes(searchValue.value.toLowerCase());
+				});
+			}
+		});
+		filterList.value = list;
+		// showSuccessToast('搜索成功');
+		// if (filterList.value.length == false) {
+		// 	showFailToast('搜索失败');
+		// }
+	} else {
+		await getMoreData()
+	}
+}
+
 getMoreData()
 </script>
 
@@ -332,7 +357,7 @@ getMoreData()
 
 	&.desktop {
 		max-width: 430px;
-	
+
 		:deep(.van-tree-select),
 		:deep(.van-dropdown-item),
 		:deep(.van-action-sheet) {
