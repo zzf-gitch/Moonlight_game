@@ -15,7 +15,8 @@
 			<van-dropdown-item v-model="value" :options="options" @change="sort" />
 			<van-dropdown-item title="筛选" ref="itemRef" @open="openSelect">
 				<van-action-sheet v-model:show="show" title="筛选" @close="closeSelect">
-					<van-search v-model="searchValue" placeholder="筛选" @update:model-value="onSearch" clearable/>
+					<!-- <span>{{ currentDateTime }}</span> -->
+					<van-search v-model="searchValue" placeholder="筛选" @update:model-value="onSearch" clearable />
 					<div class="filter-content">
 						<div v-for="item in filterList" :key="item.id" class="filter-item">
 							<div class="filter-title">{{ item.name }}<span style="font-size: 12px;color:#c2c3c4;"
@@ -68,7 +69,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, nextTick, computed } from "vue";
+import { ref, reactive, nextTick, computed, onMounted , onUnmounted } from "vue";
 import { fetchWarInfo, GetCategoriesByH5 } from '@/api/home'
 import Popup from "./popup.vue";
 import { showSuccessToast, showFailToast } from 'vant';
@@ -320,7 +321,36 @@ const isMobileDevice = () => {
 	return mobileKeywords.some(keyword => userAgent.includes(keyword));
 };
 
+// 判断是否为桌面设备 isMobileDevice为false的时候为PC端 isMobileDevice为false的时候为移动端
 const isDesktop = computed(() => !isMobileDevice());
+
+/* 实时时间 */
+// const currentDateTime = ref('');
+
+// const currentDate = () => {
+// 	const nowDate = new Date();
+// 	const currentYear = nowDate.getFullYear();
+// 	const currentMonth = nowDate.getMonth() + 1;
+// 	const currentDay = nowDate.getDate();
+// 	const currentHour = nowDate.getHours();
+// 	const currentMinute = nowDate.getMinutes();
+// 	const currentSecond = nowDate.getSeconds();
+// 	currentDateTime.value = `${currentYear}-${pad(currentMonth)}-${pad(currentDay)} ${pad(currentHour)}:${pad(currentMinute)}:${pad(currentSecond)}`;
+// 	return currentDateTime.value;
+// }
+
+// const pad = (num) => num.toString().padStart(2, '0');
+
+// const timer = ref(null);
+// onMounted(() => {
+// 	timer.value = setInterval(() => {
+// 		currentDate();
+// 	}, 1000);
+// });
+
+// onUnmounted(() => {
+// 	clearInterval(timer.value);
+// });
 
 // 搜索
 const searchValue = ref('')
