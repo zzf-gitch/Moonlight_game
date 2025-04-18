@@ -225,9 +225,22 @@ const nickname = computed(() => {
 				</template>
 			</search>
 		</van-sticky>
+
 		<van-sticky :offset-top="70">
 			<home-header @search="handleSearchGoods" @handleCategorize="handleCategorize" @sort="sort"
 				@onWarnInfo="onWarnInfo"></home-header>
+		</van-sticky>
+
+		<van-sticky :offset-top="120">
+			<!-- <van-notice-bar left-icon="volume-o" text="10年老平台 3亿鼠标的梦 买号认准月光网游选号网" /> -->
+			<van-notice-bar left-icon="volume-o" :scrollable="false">
+				<van-swipe vertical class="notice-swipe" :autoplay="3000" :touchable="false" :show-indicators="false">
+					<van-swipe-item>🔥月光网游选号网专属你的《穿越火线》战神账号！</van-swipe-item>
+					<van-swipe-item>🌟全服极品账号直供：满级VIP/英雄级武器全收集！</van-swipe-item>
+					<van-swipe-item>🎯月光选号——让每一颗子弹，都打出王者的尊严！</van-swipe-item>
+					<van-swipe-item>📞专属客服微信号：lfl239685</van-swipe-item>
+				</van-swipe>
+			</van-notice-bar>
 		</van-sticky>
 
 		<!-- 商品列表 -->
@@ -266,7 +279,7 @@ const nickname = computed(() => {
 	background-color: #ccc;
 }
 
-.nickname{
+.nickname {
 	width: 30px;
 	height: 30px;
 	border-radius: 50%;
@@ -276,5 +289,10 @@ const nickname = computed(() => {
 	align-items: center;
 	font-weight: bolder;
 	color: #fff;
+}
+
+.notice-swipe {
+	height: 40px;
+	line-height: 40px;
 }
 </style>
